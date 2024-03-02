@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94830242330",
+    "project_id": "examenproyectofinalmarcosgar",
+    "storage_bucket": "examenproyectofinalmarcosgar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94830242330:android:3f0b5e5e6525bd0faa3fa3",
+        "android_client_info": {
+          "package_name": "com.example.examen_final_psp_pmdm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCATKu24cD9bRyGM0ueum4hj4nCcR7FJDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class registerView extends StatefulWidget {
+  const registerView({super.key});
+
   @override
   _RegisterViewState createState() => _RegisterViewState();
 }
@@ -9,10 +12,33 @@ class _RegisterViewState extends State<registerView> {
   late GlobalKey<FormState> _formKey;
   late BuildContext _context;
 
+  TextEditingController tecUsername = TextEditingController();
+  TextEditingController tecPassword = TextEditingController();
+  TextEditingController tecRepassword = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
+  }
+
+  void onClickRegister() async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: tecUsername.text,
+        password: tecPassword.text,
+      );
+
+      Navigator.of(_context).popAndPushNamed('/vistalogin');
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    }
   }
 
   @override
@@ -21,14 +47,14 @@ class _RegisterViewState extends State<registerView> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: Text('Registro de Usuario'),
+        title: const Text('Registro de Usuario'),
         backgroundColor: Colors.blueGrey[700],
         foregroundColor: Colors.white70,
       ),
       body: Center(
         child: Container(
           width: 300,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.blueGrey[900],
             borderRadius: BorderRadius.circular(20),
@@ -45,8 +71,9 @@ class _RegisterViewState extends State<registerView> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  controller: tecUsername,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white70),
                     enabledBorder: UnderlineInputBorder(
@@ -57,7 +84,7 @@ class _RegisterViewState extends State<registerView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -65,8 +92,9 @@ class _RegisterViewState extends State<registerView> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  controller: tecPassword,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white70),
                     enabledBorder: UnderlineInputBorder(
@@ -78,16 +106,18 @@ class _RegisterViewState extends State<registerView> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
+
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Proporciona tu contraseña de nuevo';
                     }
                     return null;
                   },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  controller: tecRepassword,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Verifica Contraseña',
                     labelStyle: TextStyle(color: Colors.white70),
                     enabledBorder: UnderlineInputBorder(
@@ -99,31 +129,31 @@ class _RegisterViewState extends State<registerView> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Realizar acciones de registro de usuario
+                          onClickRegister();
                         }
                       },
-                      child: Text('Registrar'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[700],
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple[700],
                       ),
+                      child: const Text('Registrar'),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).popAndPushNamed('/vistalogin');
                       },
-                      child: Text('Cancelar'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[700],
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple[700],
                       ),
+                      child: const Text('Cancelar'),
                     ),
                   ],
                 ),

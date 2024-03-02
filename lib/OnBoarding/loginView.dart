@@ -7,6 +7,7 @@ class loginView extends StatefulWidget {
 
 class _LoginViewState extends State<loginView> {
   late GlobalKey<FormState> _formKey;
+  late BuildContext _context;
 
   @override
   void initState() {
@@ -16,6 +17,7 @@ class _LoginViewState extends State<loginView> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
@@ -26,7 +28,7 @@ class _LoginViewState extends State<loginView> {
       body: Center(
         child: Container(
           width: 300,
-          padding: EdgeInsets.all(60),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.blueGrey[900],
             borderRadius: BorderRadius.circular(20),
@@ -55,7 +57,7 @@ class _LoginViewState extends State<loginView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 16),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -76,19 +78,34 @@ class _LoginViewState extends State<loginView> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 24.0),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Realizar acciones de inicio de sesión
-                    }
-                  },
-                  child: Text('Login'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.purple[700],
-                    onPrimary: Colors.white,
-                  ),
-                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Cambiado a centrar
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          // Realizar acciones de inicio de sesión
+                        }
+                      },
+                      child: Text('Login'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.purple[700],
+                        onPrimary: Colors.white,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(_context).popAndPushNamed('/vistaregister');
+                      },
+                      child: Text('Registro'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.purple[700],
+                        onPrimary: Colors.white,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

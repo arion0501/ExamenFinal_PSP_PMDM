@@ -3,6 +3,10 @@ import 'package:flutter/foundation.dart';
 
 class PlatformAdmin {
 
+  double dSCREEN_WIDTH=0;
+  double dSCREEN_HEIGHT=0;
+  late BuildContext context;
+
   String getPlatformAdmin() {
     String nombre = "";
 
@@ -15,6 +19,16 @@ class PlatformAdmin {
     else
       nombre = "web";
     return nombre;
+  }
+
+  double getScreenWidth(BuildContext context){
+    dSCREEN_WIDTH=MediaQuery.of(context).size.width;
+    return dSCREEN_WIDTH;
+  }
+
+  double getScreenHeight(BuildContext context){
+    dSCREEN_HEIGHT=MediaQuery.of(context).size.height;
+    return dSCREEN_HEIGHT;
   }
 
   bool isAndroidPlatform(){

@@ -15,6 +15,11 @@ class loginView extends StatelessWidget{
         child: Container(
           width: 300,
           padding: EdgeInsets.all(60),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[900],
+            borderRadius: BorderRadius.circular(20),
+          ),
+
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

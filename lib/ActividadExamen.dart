@@ -1,3 +1,4 @@
+import 'package:examen_final_psp_pmdm/OnBoarding/homeView.dart';
 import 'package:examen_final_psp_pmdm/OnBoarding/loginView.dart';
 import 'package:flutter/material.dart';
 import 'OnBoarding/registerView.dart';
@@ -14,6 +15,7 @@ class ActividadExamen extends StatelessWidget {
         routes: {
           '/vistalogin': (context) => const loginView(),
           '/vistaregister': (context) => const registerView(),
+          '/vistahome': (context) => const homeView(),
         },
         initialRoute: '/vistalogin',
       );

@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
-class loginView extends StatelessWidget{
+class loginView extends StatefulWidget {
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<loginView> {
+  late GlobalKey<FormState> _formKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _formKey = GlobalKey<FormState>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,8 @@ class loginView extends StatelessWidget{
             color: Colors.blueGrey[900],
             borderRadius: BorderRadius.circular(20),
           ),
-
+          child: Form(
+            key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -66,7 +79,9 @@ class loginView extends StatelessWidget{
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
-
+                    if (_formKey.currentState!.validate()) {
+                      // Realizar acciones de inicio de sesión
+                    }
                   },
                   child: Text('Login'),
                   style: ElevatedButton.styleFrom(
@@ -78,6 +93,7 @@ class loginView extends StatelessWidget{
             ),
           ),
         ),
+      ),
     );
   }
 }

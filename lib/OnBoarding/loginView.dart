@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class loginView extends StatefulWidget {
+  const loginView({super.key});
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
@@ -9,26 +12,45 @@ class _LoginViewState extends State<loginView> {
   late GlobalKey<FormState> _formKey;
   late BuildContext _context;
 
+  TextEditingController tecUsername = TextEditingController();
+  TextEditingController tecPassword = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
   }
 
+  void onClickLogin() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: tecUsername.text, password: tecPassword.text);
+      print('hola he entrado');
+      //Navigator.of(_context).popAndPushNamed('/vistahome');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _context = context;
+
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: Text('Inicio de Sesión'),
+        title: const Text('Inicio de Sesión'),
         backgroundColor: Colors.blueGrey[700],
         foregroundColor: Colors.white70,
       ),
       body: Center(
         child: Container(
           width: 300,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.blueGrey[900],
             borderRadius: BorderRadius.circular(20),
@@ -45,8 +67,9 @@ class _LoginViewState extends State<loginView> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  controller: tecUsername,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white70),
                     enabledBorder: UnderlineInputBorder(
@@ -57,7 +80,7 @@ class _LoginViewState extends State<loginView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -65,8 +88,9 @@ class _LoginViewState extends State<loginView> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  controller: tecPassword,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white70),
                     enabledBorder: UnderlineInputBorder(
@@ -78,31 +102,33 @@ class _LoginViewState extends State<loginView> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Cambiado a centrar
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Cambiado a centrar
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Realizar acciones de inicio de sesión
+                          onClickLogin();
                         }
                       },
-                      child: Text('Login'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[700],
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple[700],
                       ),
+                      child: const Text('Login'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(_context).popAndPushNamed('/vistaregister');
+                        Navigator.of(_context)
+                            .popAndPushNamed('/vistaregister');
                       },
-                      child: Text('Registro'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple[700],
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple[700],
                       ),
+                      child: const Text('Registro'),
                     ),
                   ],
                 )

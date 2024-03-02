@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'OnBoarding/registerView.dart';
 
 class ActividadExamen extends StatelessWidget {
+  const ActividadExamen({super.key});
   @override
   Widget build(BuildContext context) {
     MaterialApp materialApp = const MaterialApp();
@@ -11,8 +12,8 @@ class ActividadExamen extends StatelessWidget {
         title: "Examen PMDM Marcos Garcia",
         debugShowCheckedModeBanner: false,
         routes: {
-          '/vistalogin': (context) => loginView(),
-          '/vistaregister': (context) => registerView(),
+          '/vistalogin': (context) => const loginView(),
+          '/vistaregister': (context) => const registerView(),
         },
         initialRoute: '/vistalogin',
       );

@@ -64,6 +64,16 @@ class loginView extends StatelessWidget{
                   obscureText: true,
                 ),
                 SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  child: Text('Login'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.purple[700],
+                    onPrimary: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),

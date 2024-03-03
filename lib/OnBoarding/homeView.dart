@@ -217,7 +217,7 @@ class _HomeViewState extends State<homeView> {
         padding: const EdgeInsets.only(bottom: 80.0),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushNamed("/vistacreapublicacion");
+            Navigator.of(context).pushNamed("/vistacreaproducto");
           },
           child: const Icon(Icons.add),
         ),
@@ -292,11 +292,12 @@ class _HomeViewState extends State<homeView> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.edit, color: Colors.white),
-              title: const Text('Editar perfil',
+              leading: const Icon(Icons.map, color: Colors.white),
+              title: const Text('Mapa de ubicaciones',
                   style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.popAndPushNamed(context, '/vistamapa');
               },
             ),
             ListTile(

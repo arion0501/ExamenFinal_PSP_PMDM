@@ -143,7 +143,7 @@ class _LoginPhoneViewState extends State<loginPhone> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                      ElevatedButton(
+                    ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           enviarTelefonoPressed();
@@ -153,19 +153,19 @@ class _LoginPhoneViewState extends State<loginPhone> {
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.purple[700],
                       ),
-                      child: const Text('Enviar (teléfono)'),
+                      child: const Text('Enviar'),
                     ),
-                    if(blMostrarVerification)
+                    if (blMostrarVerification)
                       ElevatedButton(
-                      onPressed: () {
+                        onPressed: () {
                           enviarVerifyPressed();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.purple[700],
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.purple[700],
+                        ),
+                        child: const Text('Enviar (código)'),
                       ),
-                      child: const Text('Enviar (código)'),
-                    ),
                   ],
                 )
               ],

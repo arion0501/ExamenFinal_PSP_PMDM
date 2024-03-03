@@ -69,8 +69,7 @@ class _HomeViewState extends State<homeView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                    'Se encontraron items: $searchValue'),
+                Text('Se encontraron items: $searchValue'),
                 for (var match in matches) Text('• $match'),
               ],
             ),
@@ -91,8 +90,7 @@ class _HomeViewState extends State<homeView> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Resultados de la Búsqueda'),
-            content: Text(
-                'No se encontraron items: $searchValue'),
+            content: Text('No se encontraron items: $searchValue'),
             actions: [
               TextButton(
                 child: const Text('Aceptar'),
@@ -176,6 +174,61 @@ class _HomeViewState extends State<homeView> {
         child: Container(
           width: 300,
           padding: const EdgeInsets.all(20),
+        ),
+      ),
+      drawer: Drawer(
+        backgroundColor: Colors.blueGrey[900],
+        child: ListView(
+          padding: const EdgeInsets.all(0),
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
+              child: UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Colors.blueGrey),
+                accountName: Text(
+                  "Prueba",
+                  style: TextStyle(fontSize: 18),
+                ),
+                accountEmail: null,
+                currentAccountPictureSize: Size.square(50),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.black,
+                  child: Text(
+                    "P",
+                    style: TextStyle(fontSize: 30.0, color: Colors.blue),
+                  ), //Text
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person, color: Colors.white),
+              title: const Text(
+                'Mi perfil',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit, color: Colors.white),
+              title: const Text('Editar perfil',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.white),
+              title: const Text('Cerrar sesión',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );

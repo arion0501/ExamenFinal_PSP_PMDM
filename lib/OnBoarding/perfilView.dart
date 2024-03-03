@@ -28,10 +28,10 @@ class _PerfilViewState extends State<perfilView> {
 
   void onClickAceptar() async {
     UsuariosFS usuario = UsuariosFS(
-      nombre: tecNombre.text,
-      apellidos: tecApellidos.text,
-      edad: int.parse(tecEdad.text),
-    );
+        nombre: tecNombre.text,
+        apellidos: tecApellidos.text,
+        edad: int.parse(tecEdad.text),
+        geoloc: const GeoPoint(0, 0));
     String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
     await fb.collection("Perfiles").doc(uidUsuario).set(usuario.toFirestore());
 

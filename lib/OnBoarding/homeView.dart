@@ -13,6 +13,100 @@ class _HomeViewState extends State<homeView> {
   TextEditingController tecUsername = TextEditingController();
   TextEditingController tecPassword = TextEditingController();
 
+  void buscarBy() {
+    TextEditingController searchController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Buscar item por ?'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Ingrese item a buscar',
+                  contentPadding: EdgeInsets.all(16.0),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  String searchValue = searchController.text.trim();
+                  if (searchValue.isNotEmpty) {
+                    Navigator.of(context)
+                        .pop(); // Cerrar el diálogo de búsqueda
+                    buscarAsync(searchValue);
+                  }
+                },
+                child: const Text('Buscar'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void buscarAsync(String searchValue) async {
+    List<String> matches = [];
+
+    /*for (var post in ?) {
+      if (post.titulo.toLowerCase().startsWith(searchValue.toLowerCase())) {
+        matches.add(post.titulo);
+      }
+    }*/
+
+    if (matches.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Resultados de la Búsqueda'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    'Se encontraron items: $searchValue'),
+                for (var match in matches) Text('• $match'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Resultados de la Búsqueda'),
+            content: Text(
+                'No se encontraron items: $searchValue'),
+            actions: [
+              TextButton(
+                child: const Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _context = context;
@@ -20,9 +114,29 @@ class _HomeViewState extends State<homeView> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text('Inicio de Sesión'),
+        title: const Text('Home'),
         backgroundColor: Colors.blueGrey[700],
         foregroundColor: Colors.white70,
+        actions: [
+          PopupMenuButton(
+            onSelected: (indice) {
+              switch (indice) {
+                case 'busca':
+                  buscarBy();
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: 'busca',
+                child: ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Buscar por ?'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
@@ -53,8 +167,8 @@ class _HomeViewState extends State<homeView> {
             label: 'Grid View',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Configuración',
+            icon: Icon(Icons.account_circle),
+            label: 'Perfil',
           ),
         ],
       ),

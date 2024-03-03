@@ -25,8 +25,7 @@ class _LoginViewState extends State<loginView> {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: tecUsername.text, password: tecPassword.text);
-      print('hola he entrado');
-      //Navigator.of(_context).popAndPushNamed('/vistahome');
+      Navigator.of(_context).popAndPushNamed('/vistahome');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

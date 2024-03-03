@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../SingleTone/DataHolder.dart';
 
 class homeView extends StatefulWidget {
   const homeView({Key? key}) : super(key: key);
@@ -12,6 +14,71 @@ class _HomeViewState extends State<homeView> {
 
   TextEditingController tecUsername = TextEditingController();
   TextEditingController tecPassword = TextEditingController();
+
+  void apiUbicacion() async {
+    try {
+      Map<String, dynamic> ubicacionCliente =
+          await DataHolder().admin.obtenerUbicacionCliente();
+
+      String ip = ubicacionCliente['ip'];
+      String ciudad = ubicacionCliente['city'];
+      String region = ubicacionCliente['region'];
+      String pais = ubicacionCliente['country'];
+      String codigoPostal = ubicacionCliente['postal'];
+      double latitud =
+          double.parse(ubicacionCliente['loc']?.split(',')[0] ?? '0');
+      double longitud =
+          double.parse(ubicacionCliente['loc']?.split(',')[1] ?? '0');
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Información de Ubicación del Cliente'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('IP: $ip'),
+                Text('Ciudad: $ciudad'),
+                Text('Región: $region'),
+                Text('País: $pais'),
+                Text('Código Postal: $codigoPostal'),
+                Text('Latitud: $latitud'),
+                Text('Longitud: $longitud'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Error al obtener la ubicación del cliente'),
+            actions: [
+              TextButton(
+                child: const Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   void buscarBy() {
     TextEditingController searchController = TextEditingController();
@@ -122,9 +189,19 @@ class _HomeViewState extends State<homeView> {
                 case 'busca':
                   buscarBy();
                   break;
+                case 'apiUbicacion':
+                  apiUbicacion();
+                  break;
               }
             },
             itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: 'apiUbicacion',
+                child: ListTile(
+                  leading: Icon(Icons.map_rounded),
+                  title: Text('Ubicación'),
+                ),
+              ),
               const PopupMenuItem(
                 value: 'busca',
                 child: ListTile(
@@ -204,13 +281,14 @@ class _HomeViewState extends State<homeView> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.person, color: Colors.white),
+              leading: const Icon(Icons.home, color: Colors.white),
               title: const Text(
-                'Mi perfil',
+                'Home',
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.popAndPushNamed(context, '/vistahome');
               },
             ),
             ListTile(
@@ -225,8 +303,10 @@ class _HomeViewState extends State<homeView> {
               leading: const Icon(Icons.logout, color: Colors.white),
               title: const Text('Cerrar sesión',
                   style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop();
+                Navigator.popAndPushNamed(context, '/vistalogin');
               },
             ),
           ],

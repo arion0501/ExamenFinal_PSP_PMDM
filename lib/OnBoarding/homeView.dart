@@ -112,7 +112,7 @@ class _HomeViewState extends State<homeView> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Productos'),
         backgroundColor: Colors.blueGrey[700],
         foregroundColor: Colors.white70,
         actions: [
@@ -181,24 +181,25 @@ class _HomeViewState extends State<homeView> {
         child: ListView(
           padding: const EdgeInsets.all(0),
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blueGrey,
               ),
               child: UserAccountsDrawerHeader(
                 decoration: BoxDecoration(color: Colors.blueGrey),
-                accountName: Text(
-                  "Prueba",
-                  style: TextStyle(fontSize: 18),
-                ),
+                accountName: Text('Leroy Merlin'),
                 accountEmail: null,
                 currentAccountPictureSize: Size.square(50),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  child: Text(
-                    "P",
-                    style: TextStyle(fontSize: 30.0, color: Colors.blue),
-                  ), //Text
+                currentAccountPicture: Container(
+                  width: 80.0,
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage('resources/leroyMerlin.jpeg'),
+                    ),
+                  ),
                 ),
               ),
             ),

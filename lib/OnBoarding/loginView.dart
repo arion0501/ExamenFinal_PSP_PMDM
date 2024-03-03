@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../FirestoreObjects/UsuarioFS.dart';
 
 class loginView extends StatefulWidget {
   const loginView({super.key});
@@ -11,6 +13,7 @@ class loginView extends StatefulWidget {
 class _LoginViewState extends State<loginView> {
   late GlobalKey<FormState> _formKey;
   late BuildContext _context;
+  FirebaseFirestore fs = FirebaseFirestore.instance;
 
   TextEditingController tecUsername = TextEditingController();
   TextEditingController tecPassword = TextEditingController();
@@ -25,7 +28,24 @@ class _LoginViewState extends State<loginView> {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: tecUsername.text, password: tecPassword.text);
-      Navigator.of(_context).popAndPushNamed('/vistahome');
+
+      String uidUser = FirebaseAuth.instance.currentUser!.uid;
+
+      DocumentReference<UsuariosFS> reference = fs
+          .collection("Perfiles")
+          .doc(uidUser)
+          .withConverter(
+              fromFirestore: UsuariosFS.fromFirestore,
+              toFirestore: (UsuariosFS usuario, _) => usuario.toFirestore());
+
+      DocumentSnapshot<UsuariosFS> docSnap = await reference.get();
+      if (docSnap.exists) {
+        UsuariosFS usuario = docSnap.data()!;
+        print("nombre login user: ${usuario.nombre}");
+        Navigator.of(_context).popAndPushNamed('/vistahome');
+      } else {
+        Navigator.of(_context).popAndPushNamed('/vistaperfil');
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -104,7 +124,6 @@ class _LoginViewState extends State<loginView> {
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Cambiado a centrar
                   children: [
                     ElevatedButton(
                       onPressed: () {

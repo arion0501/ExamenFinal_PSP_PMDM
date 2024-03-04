@@ -5,6 +5,7 @@ import 'package:examen_final_psp_pmdm/OnBoarding/perfilView.dart';
 import 'package:examen_final_psp_pmdm/Views/MapaView.dart';
 import 'package:flutter/material.dart';
 import 'OnBoarding/loginPhone.dart';
+import 'OnBoarding/notificationsView.dart';
 import 'OnBoarding/registerView.dart';
 import 'SingleTone/DataHolder.dart';
 
@@ -27,6 +28,7 @@ class ActividadExamen extends StatelessWidget {
           '/vistaperfil': (context) => const perfilView(),
           '/vistacreaproducto': (context) => const vistaCreaProducto(),
           '/vistamapa': (context) => MapaView(),
+          '/vistanotificaciones': (context) => notificationsView(),
         },
         initialRoute: '/vistalogin',
       );
@@ -41,6 +43,7 @@ class ActividadExamen extends StatelessWidget {
           '/vistaperfil': (context) => const perfilView(),
           '/vistacreaproducto': (context) => const vistaCreaProducto(),
           '/vistamapa': (context) => MapaView(),
+          '/vistanotificaciones': (context) => notificationsView(),
         },
         initialRoute: '/vistalogin',
       );

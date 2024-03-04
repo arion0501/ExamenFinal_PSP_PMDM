@@ -41,9 +41,12 @@ class DataHolder {
     prefs.setString('descripcion', selectedProduct.descripcion);
     prefs.setDouble('precio', selectedProduct.precio);
     prefs.setString('fecha', selectedProduct.fecha as String);
+    prefs.setString('imagen', selectedProduct.imagen);
   }
 
-  void initDataHolder() {}
+  void initDataHolder() {
+    selectedProduct;
+  }
 
   Future<ProductosFS?> initCachedFbProducto() async {
     if (productoGuardado != null) return productoGuardado;
@@ -60,8 +63,11 @@ class DataHolder {
 
     DateTime? fecha = DateTime.parse(prefs.getString('fecha') ?? "");
 
+    String? imagen = prefs.getString('imagen');
+    imagen??="";
+
     productoGuardado = ProductosFS(
-        nombre: nombre, descripcion: descripcion, precio: precio, fecha: fecha);
+        nombre: nombre, descripcion: descripcion, precio: precio, fecha: fecha, imagen: imagen);
 
     return productoGuardado;
   }

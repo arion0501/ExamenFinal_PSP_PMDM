@@ -22,6 +22,17 @@ class MapaViewState extends State<MapaView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueGrey[900],
+        foregroundColor: Colors.white70,
+        title: const Text('Mapa de Ubicaciones'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Stack(
         children: [
           GoogleMap(
@@ -33,11 +44,9 @@ class MapaViewState extends State<MapaView> {
             markers: tiendas,
             gestureRecognizers: Set()
               ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-              ..add(Factory<ScaleGestureRecognizer>(
-                  () => ScaleGestureRecognizer()))
+              ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
               ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-              ..add(Factory<VerticalDragGestureRecognizer>(
-                  () => VerticalDragGestureRecognizer())),
+              ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
           ),
           Align(
             alignment: Alignment.bottomLeft,

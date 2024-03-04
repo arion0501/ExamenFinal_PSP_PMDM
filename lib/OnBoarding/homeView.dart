@@ -43,19 +43,17 @@ class _HomeViewState extends State<homeView> {
     }
   }
 
-  void onItemListaClicked(int index){
+  void onItemListaClicked(int index) {
     DataHolder().productoGuardado = productos[index];
     DataHolder().saveSelectedProductInCache();
-    Navigator.of(context).pushNamed('/productosview');
+    Navigator.popAndPushNamed(context, '/vistaproducto');
   }
 
   Widget creadorCeldas(BuildContext context, int index) {
     return CustomGridView(
-      productos: productos,
-      iPosicion: index,
-      onItemListClickedFun: (int indice) {
-      },
-    );
+        productos: productos,
+        iPosicion: index,
+        onItemListClickedFun: onItemListaClicked);
   }
 
   Widget vistaProductos() {
@@ -134,7 +132,7 @@ class _HomeViewState extends State<homeView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Buscar item por ?'),
+          title: const Text('Buscar item por nombre'),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -166,11 +164,11 @@ class _HomeViewState extends State<homeView> {
   void buscarAsync(String searchValue) async {
     List<String> matches = [];
 
-    /*for (var post in ?) {
-      if (post.titulo.toLowerCase().startsWith(searchValue.toLowerCase())) {
-        matches.add(post.titulo);
+    for (var post in productos) {
+      if (post.nombre.toLowerCase().startsWith(searchValue.toLowerCase())) {
+        matches.add(post.nombre);
       }
-    }*/
+    }
 
     if (matches.isNotEmpty) {
       showDialog(
@@ -252,7 +250,7 @@ class _HomeViewState extends State<homeView> {
                 value: 'busca',
                 child: ListTile(
                   leading: Icon(Icons.search),
-                  title: Text('Buscar por ?'),
+                  title: Text('Buscar por nombre'),
                 ),
               ),
             ],
@@ -276,7 +274,7 @@ class _HomeViewState extends State<homeView> {
         unselectedItemColor: Colors.grey[400],
         currentIndex: 0,
         onTap: (index) {
-          // Aquí puedes agregar la lógica para manejar el cambio de ícono
+
         },
         items: const [
           BottomNavigationBarItem(
@@ -293,8 +291,10 @@ class _HomeViewState extends State<homeView> {
           ),
         ],
       ),
-      body: Center(
-        child: vistaProductos()
+      body: SafeArea(
+        child: Center(
+          child: vistaProductos(),
+        ),
       ),
       drawer: Drawer(
         backgroundColor: Colors.blueGrey[900],

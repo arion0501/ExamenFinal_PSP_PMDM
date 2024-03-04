@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:examen_final_psp_pmdm/FirestoreObjects/ProductosFS.dart';
+import 'package:examen_final_psp_pmdm/SingleTone/DataHolder.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -174,8 +176,7 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
                               ),
                               child: const Text(
                                 'Guardar',
-                                style: TextStyle(
-                                    fontSize: 14),
+                                style: TextStyle(fontSize: 14),
                               ),
                             ),
                             ElevatedButton(
@@ -225,6 +226,11 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
     String nombre = tecNombre.text.trim();
     String descripcion = tecDescripcion.text.trim();
     double precio = double.tryParse(tecPrecio.text.trim()) ?? 0.0;
+
+    ProductosFS productoNuevo = ProductosFS(
+        nombre: nombre, descripcion: descripcion, precio: precio, fecha: fecha);
+    DataHolder().crearProductoEnFB(productoNuevo);
+    Navigator.popAndPushNamed(context, '/vistahome');
   }
 
   void _onPressedGallery() async {

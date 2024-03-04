@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:examen_final_psp_pmdm/FirestoreObjects/ProductosFS.dart';
 import 'package:examen_final_psp_pmdm/SingleTone/DataHolder.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,7 +16,6 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
   File? _imagePreview;
-  late BuildContext _context;
 
   TextEditingController tecNombre = TextEditingController();
   TextEditingController tecDescripcion = TextEditingController();
@@ -61,7 +61,7 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         GestureDetector(
-                          onTap: _onPressedGallery,
+                          onTap: onCameraClicked,
                           child: Stack(
                             children: [
                               CircleAvatar(
@@ -222,19 +222,55 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
     }
   }
 
-  void _guardarProducto() {
+  Future<void> _guardarProducto() async {
     String nombre = tecNombre.text.trim();
     String descripcion = tecDescripcion.text.trim();
-    double precio = double.tryParse(tecPrecio.text.trim()) ?? 0.0;
+    double precio = double.parse(tecPrecio.text);
+
+
+    String imageUrl = await _subirImagen(_imagePreview);
 
     ProductosFS productoNuevo = ProductosFS(
-        nombre: nombre, descripcion: descripcion, precio: precio, fecha: fecha);
+      nombre: nombre,
+      descripcion: descripcion,
+      precio: precio,
+      fecha: fecha,
+      imagen: imageUrl,
+    );
+
     DataHolder().crearProductoEnFB(productoNuevo);
     Navigator.popAndPushNamed(context, '/vistahome');
   }
 
-  void _onPressedGallery() async {
+  Future<String> _subirImagen(File? imageFile) async {
+    if (imageFile == null) {
+      return "";
+    }
+
+    try {
+      final FirebaseStorage storage = FirebaseStorage.instance;
+      String fileName =
+          'productos/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      UploadTask task = storage.ref(fileName).putFile(imageFile);
+
+      TaskSnapshot snapshot = await task.whenComplete(() {});
+
+      String imageUrl = await snapshot.ref.getDownloadURL();
+
+      return imageUrl;
+    } catch (e) {
+      print("Error al subir la imagen: $e");
+      return "";
+    }
+  }
+
+  void onGalleryClicked() async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  }
+
+  void onCameraClicked() async {
+    XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
         _imagePreview = File(image.path);

@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examen_final_psp_pmdm/Custom/CustomGridView.dart';
+import 'package:examen_final_psp_pmdm/FirestoreObjects/ProductosFS.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../SingleTone/DataHolder.dart';
@@ -11,9 +14,53 @@ class homeView extends StatefulWidget {
 
 class _HomeViewState extends State<homeView> {
   late BuildContext _context;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  final List<ProductosFS> productos = [];
+  bool bIsList = false;
 
   TextEditingController tecUsername = TextEditingController();
   TextEditingController tecPassword = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    descargarProductos();
+  }
+
+  void descargarProductos() async {
+    CollectionReference<ProductosFS> reference = db
+        .collection("Productos")
+        .withConverter(
+            fromFirestore: ProductosFS.fromFirestore,
+            toFirestore: (ProductosFS post, _) => post.toFirestore());
+
+    QuerySnapshot<ProductosFS> querySnap = await reference.get();
+    for (int i = 0; i < querySnap.docs.length; i++) {
+      setState(() {
+        productos.add(querySnap.docs[i].data());
+      });
+    }
+  }
+
+  void onItemListaClicked(int index){
+    DataHolder().productoGuardado = productos[index];
+    DataHolder().saveSelectedProductInCache();
+    Navigator.of(context).pushNamed('/productosview');
+  }
+
+  Widget creadorCeldas(BuildContext context, int index) {
+    return CustomGridView(
+      productos: productos,
+      iPosicion: index,
+      onItemListClickedFun: (int indice) {
+      },
+    );
+  }
+
+  Widget vistaProductos() {
+    return creadorCeldas(context, productos.length);
+  }
 
   void apiUbicacion() async {
     try {
@@ -103,8 +150,7 @@ class _HomeViewState extends State<homeView> {
                 onPressed: () {
                   String searchValue = searchController.text.trim();
                   if (searchValue.isNotEmpty) {
-                    Navigator.of(context)
-                        .pop(); // Cerrar el diálogo de búsqueda
+                    Navigator.of(context).pop();
                     buscarAsync(searchValue);
                   }
                 },
@@ -248,10 +294,7 @@ class _HomeViewState extends State<homeView> {
         ],
       ),
       body: Center(
-        child: Container(
-          width: 300,
-          padding: const EdgeInsets.all(20),
-        ),
+        child: vistaProductos()
       ),
       drawer: Drawer(
         backgroundColor: Colors.blueGrey[900],
@@ -289,6 +332,15 @@ class _HomeViewState extends State<homeView> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.popAndPushNamed(context, '/vistahome');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.notifications, color: Colors.white),
+              title: const Text('Notificaciones',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () async {
+                Navigator.of(context).pop();
+                Navigator.popAndPushNamed(context, '/vistanotificaciones');
               },
             ),
             ListTile(

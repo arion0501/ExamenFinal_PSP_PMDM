@@ -39,11 +39,11 @@ class CustomGridView extends StatelessWidget {
                   child: Image.network(
                     productos[index].imagen,
                     fit: BoxFit.cover,
-                    height: 110.08,
+                    height: 115.3,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(bottom: 1, left: 8, top: 1),
                   child: Text(
                     productos[index].nombre,
                     style: const TextStyle(fontSize: 16, color: Colors.white70),

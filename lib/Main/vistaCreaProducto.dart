@@ -213,12 +213,36 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
       context: context,
       initialDate: fecha,
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime.now().add(
+          Duration(days: 365)),
     );
+
     if (fechaSeleccionada != null) {
-      setState(() {
-        fecha = fechaSeleccionada;
-      });
+      if (fechaSeleccionada
+          .isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error de fecha'),
+              content: Text(
+                  'La fecha seleccionada no puede ser anterior al día actual.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        setState(() {
+          fecha = fechaSeleccionada;
+        });
+      }
     }
   }
 
@@ -226,7 +250,6 @@ class _VistaCreaProductoState extends State<vistaCreaProducto> {
     String nombre = tecNombre.text.trim();
     String descripcion = tecDescripcion.text.trim();
     double precio = double.parse(tecPrecio.text);
-
 
     String imageUrl = await _subirImagen(_imagePreview);
 

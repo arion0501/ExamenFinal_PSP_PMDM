@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examen_final_psp_pmdm/Custom/CustomGridView.dart';
+import 'package:examen_final_psp_pmdm/Custom/CustomListView.dart';
 import 'package:examen_final_psp_pmdm/FirestoreObjects/ProductosFS.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,10 @@ class _HomeViewState extends State<homeView> {
     }
   }
 
+  Widget separadorLista(BuildContext context, int index) {
+    return Divider();
+  }
+
   void onItemListaClicked(int index) {
     DataHolder().productoGuardado = productos[index];
     DataHolder().saveSelectedProductInCache();
@@ -54,6 +59,31 @@ class _HomeViewState extends State<homeView> {
         productos: productos,
         iPosicion: index,
         onItemListClickedFun: onItemListaClicked);
+  }
+
+  Widget? creadorListas(BuildContext context, int index) {
+    return CustomListView(
+      iPosicion: index,
+      onItemListClickedFun: onItemListaClicked,
+      nombre: productos[index].nombre,
+      dFontSize: 16,
+      mcColores: Colors.blueGrey,
+      imagen: productos[index].imagen,
+      precio: productos[index].precio,
+    );
+  }
+
+  Widget? listaOCelda(bool isList) {
+    if (isList) {
+      return ListView.separated(
+        padding: EdgeInsets.all(8),
+        itemCount: productos.length,
+        itemBuilder: creadorListas,
+        separatorBuilder: separadorLista,
+      );
+    } else {
+      return creadorCeldas(context, productos.length);
+    }
   }
 
   Widget vistaProductos() {
@@ -216,6 +246,23 @@ class _HomeViewState extends State<homeView> {
     }
   }
 
+  void onItemTapped(int index) {
+    setState(() {
+      switch (index) {
+        case 0:
+          bIsList = true;
+          break;
+        case 1:
+          bIsList = false;
+          break;
+        case 2:
+          Navigator.of(context).pop();
+          Navigator.pushNamed(context, '/vistaeditaperfil');
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _context = context;
@@ -272,10 +319,10 @@ class _HomeViewState extends State<homeView> {
         backgroundColor: Colors.blueGrey[900],
         selectedItemColor: Colors.white70,
         unselectedItemColor: Colors.grey[400],
-        currentIndex: 0,
-        onTap: (index) {
-
-        },
+        currentIndex: bIsList ? 0 : 1,
+        // Cambiado aquí
+        onTap: onItemTapped,
+        // Cambiado aquí
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.list_rounded),
@@ -293,7 +340,7 @@ class _HomeViewState extends State<homeView> {
       ),
       body: SafeArea(
         child: Center(
-          child: vistaProductos(),
+          child: listaOCelda(bIsList),
         ),
       ),
       drawer: Drawer(

@@ -30,6 +30,7 @@ class MapaViewState extends State<MapaView> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
+            Navigator.pushNamed(context, '/vistahome');
           },
         ),
       ),
@@ -44,9 +45,11 @@ class MapaViewState extends State<MapaView> {
             markers: tiendas,
             gestureRecognizers: Set()
               ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-              ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+              ..add(Factory<ScaleGestureRecognizer>(
+                  () => ScaleGestureRecognizer()))
               ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-              ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
+              ..add(Factory<VerticalDragGestureRecognizer>(
+                  () => VerticalDragGestureRecognizer())),
           ),
           Align(
             alignment: Alignment.bottomLeft,

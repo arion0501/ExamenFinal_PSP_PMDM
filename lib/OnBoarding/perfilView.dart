@@ -24,14 +24,31 @@ class _PerfilViewState extends State<perfilView> {
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
+    cargarDatosUsuario();
+  }
+
+  void cargarDatosUsuario() async {
+    String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> doc =
+    await fb.collection("Perfiles").doc(uidUsuario).get();
+
+    if (doc.exists) {
+      Map<String, dynamic> data = doc.data()!;
+      setState(() {
+        tecNombre.text = data['nombre'];
+        tecApellidos.text = data['apellidos'];
+        tecEdad.text = data['edad'].toString();
+      });
+    }
   }
 
   void onClickAceptar() async {
     UsuariosFS usuario = UsuariosFS(
-        nombre: tecNombre.text,
-        apellidos: tecApellidos.text,
-        edad: int.parse(tecEdad.text),
-        geoloc: const GeoPoint(0, 0));
+      nombre: tecNombre.text,
+      apellidos: tecApellidos.text,
+      edad: int.parse(tecEdad.text),
+      geoloc: const GeoPoint(0, 0),
+    );
     String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
     await fb.collection("Perfiles").doc(uidUsuario).set(usuario.toFirestore());
 
